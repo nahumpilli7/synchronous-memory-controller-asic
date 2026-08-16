@@ -4,6 +4,8 @@
 
 This is a small, blocking memory controller intended to demonstrate a complete RTL-to-layout ASIC flow. It is not a DRAM controller: there are no banks, refresh operations, bursts, queues, or external memory signaling. The memory is modeled as eight 32-bit words synthesized from registers in the implemented configuration.
 
+![Memory controller RTL architecture](images/controller-architecture.svg)
+
 ## Interface
 
 | Signal | Direction | Width | Meaning |
