@@ -1,0 +1,9 @@
+Sanitized retained ModelSim 2022.1 result
+========================================
+[166000] READ PASS: addr=0x00000004 data=0xa5a51234
+[286000] READ PASS: addr=0x0000000c data=0xdeadbeef
+[406000] READ PASS: addr=0x00000004 data=0xcafebabe
+[406000] ALL TESTS PASSED
+Errors: 0
+
+Vendor banner, host information, and absolute paths were removed.
