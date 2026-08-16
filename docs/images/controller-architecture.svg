@@ -1,151 +1,123 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
-  <title id="title">Synchronous memory controller RTL architecture</title>
-  <desc id="desc">Block diagram showing the request interface, four-state control FSM, wait counter, latched request registers, address decoder, eight by thirty-two-bit register memory, response register, and response interface.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1750" height="820" viewBox="0 0 1750 820" role="img" aria-labelledby="title desc">
+  <title id="title">Synchronous memory controller hardware architecture</title>
+  <desc id="desc">Hardware block diagram with a four-state control FSM and wait counter above a straight request-register, address-decode, memory-array, and read-response datapath.</desc>
   <defs>
     <style>
-      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #172033; }
-      .subtitle { font: 400 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #566178; }
-      .section { font: 700 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #32405a; letter-spacing: 0.04em; }
-      .nodeTitle { font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #172033; }
-      .label { font: 500 14px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #26344d; }
-      .small { font: 400 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #566178; }
-      .edge { fill: none; stroke: #4b5d78; stroke-width: 2.2; marker-end: url(#arrow); }
-      .controlEdge { fill: none; stroke: #0f766e; stroke-width: 2.2; marker-end: url(#arrowTeal); }
-      .dataEdge { fill: none; stroke: #4f46e5; stroke-width: 2.4; marker-end: url(#arrowIndigo); }
-      .dashed { stroke-dasharray: 7 6; }
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .subtitle { font: 400 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #5b6575; }
+      .coreLabel { font: 700 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0.08em; fill: #475569; }
+      .blockTitle { font: 700 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .signal { font: 600 15px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #243047; }
+      .mono { font: 500 14px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #334155; }
+      .note { font: 400 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #64748b; }
+      .edgeLabel { font: 500 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #526074; }
+      .state { font: 600 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #0f5f59; }
+      .data { fill: none; stroke: #2563eb; stroke-width: 3.2; marker-end: url(#dataArrow); }
+      .control { fill: none; stroke: #0f766e; stroke-width: 2.2; marker-end: url(#controlArrow); }
+      .global { fill: none; stroke: #64748b; stroke-width: 1.8; marker-end: url(#globalArrow); }
     </style>
-    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4b5d78"/>
+    <marker id="dataArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#2563eb"/>
     </marker>
-    <marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0f766e"/>
+    <marker id="controlArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#0f766e"/>
     </marker>
-    <marker id="arrowIndigo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4f46e5"/>
+    <marker id="globalArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/>
     </marker>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#172033" flood-opacity="0.10"/>
-    </filter>
   </defs>
 
-  <rect width="1400" height="760" rx="18" fill="#ffffff"/>
-  <text x="700" y="48" text-anchor="middle" class="title">Synchronous Memory Controller — RTL Architecture</text>
-  <text x="700" y="76" text-anchor="middle" class="subtitle">Blocking single-request interface • 8 × 32-bit register memory • configured 3-cycle wait</text>
+  <rect width="1750" height="820" fill="#ffffff"/>
+  <text x="875" y="42" text-anchor="middle" class="title">Synchronous Memory Controller</text>
+  <text x="875" y="68" text-anchor="middle" class="subtitle">RTL architecture • one blocking request • 8 × 32-bit register memory • three configured wait cycles</text>
 
-  <!-- External request interface -->
-  <rect x="35" y="176" width="225" height="388" rx="16" fill="#fff8e8" stroke="#e6ad35" stroke-width="2" filter="url(#shadow)"/>
-  <text x="147.5" y="210" text-anchor="middle" class="section">REQUEST INTERFACE</text>
-  <line x1="58" y1="228" x2="237" y2="228" stroke="#ebc46d"/>
-  <text x="63" y="263" class="label">req_valid</text>
-  <text x="63" y="299" class="label">req_rw</text>
-  <text x="63" y="335" class="label">req_addr[31:0]</text>
-  <text x="63" y="371" class="label">req_wdata[31:0]</text>
-  <line x1="58" y1="397" x2="237" y2="397" stroke="#ebc46d"/>
-  <text x="63" y="432" class="label">clk</text>
-  <text x="63" y="468" class="label">rst_n</text>
-  <text x="63" y="514" class="small">Source holds req_* stable</text>
-  <text x="63" y="534" class="small">through the LATCH edge</text>
+  <rect x="280" y="100" width="1110" height="620" rx="8" fill="#fafbfc" stroke="#94a3b8" stroke-width="1.8"/>
+  <text x="305" y="128" class="coreLabel">MEM_CONTROLLER</text>
 
-  <!-- Controller core -->
-  <rect x="300" y="112" width="790" height="530" rx="20" fill="#f8fafc" stroke="#b8c2d3" stroke-width="2" filter="url(#shadow)"/>
-  <text x="695" y="143" text-anchor="middle" class="section">MEM_CONTROLLER CORE</text>
+  <text x="44" y="183" class="signal">req_valid</text>
+  <path d="M150 178 H420" class="control"/>
+  <text x="44" y="444" class="signal">req_rw</text>
+  <path d="M132 439 H360" class="data"/>
+  <text x="44" y="504" class="signal">req_addr[31:0]</text>
+  <path d="M208 499 H360" class="data"/>
+  <text x="44" y="564" class="signal">req_wdata[31:0]</text>
+  <path d="M218 559 H360" class="data"/>
 
-  <!-- Control plane -->
-  <rect x="326" y="164" width="738" height="185" rx="14" fill="#ebfbf8" stroke="#5cc6b9" stroke-width="1.8"/>
-  <text x="349" y="193" class="section">CONTROL PATH</text>
+  <rect x="420" y="145" width="390" height="155" rx="6" fill="#ffffff" stroke="#0f766e" stroke-width="2"/>
+  <rect x="420" y="145" width="390" height="7" fill="#0f766e"/>
+  <text x="615" y="183" text-anchor="middle" class="blockTitle">Controller FSM</text>
+  <text x="615" y="225" text-anchor="middle" class="state">IDLE  →  LATCH  →  WAIT  →  RESPOND  →  IDLE</text>
+  <text x="615" y="259" text-anchor="middle" class="note">accept  •  capture  •  delay  •  response</text>
 
-  <rect x="350" y="211" width="430" height="105" rx="12" fill="#ffffff" stroke="#23a394" stroke-width="1.8"/>
-  <text x="565" y="237" text-anchor="middle" class="nodeTitle">Four-state control FSM</text>
-  <rect x="373" y="257" width="72" height="34" rx="17" fill="#d6f5ef" stroke="#23a394"/>
-  <text x="409" y="279" text-anchor="middle" class="small">IDLE</text>
-  <path d="M445 274 H470" class="controlEdge"/>
-  <rect x="472" y="257" width="78" height="34" rx="17" fill="#d6f5ef" stroke="#23a394"/>
-  <text x="511" y="279" text-anchor="middle" class="small">LATCH</text>
-  <path d="M550 274 H575" class="controlEdge"/>
-  <rect x="577" y="257" width="72" height="34" rx="17" fill="#d6f5ef" stroke="#23a394"/>
-  <text x="613" y="279" text-anchor="middle" class="small">WAIT</text>
-  <path d="M649 274 H674" class="controlEdge"/>
-  <rect x="676" y="257" width="82" height="34" rx="17" fill="#d6f5ef" stroke="#23a394"/>
-  <text x="717" y="279" text-anchor="middle" class="small">RESPOND</text>
-  <path d="M717 291 V305 H409 V291" class="controlEdge"/>
+  <rect x="930" y="155" width="230" height="120" rx="6" fill="#ffffff" stroke="#0f766e" stroke-width="2"/>
+  <rect x="930" y="155" width="230" height="7" fill="#0f766e"/>
+  <text x="1045" y="195" text-anchor="middle" class="blockTitle">Wait Counter</text>
+  <text x="1045" y="225" text-anchor="middle" class="mono">wait_q: 3 → 2 → 1 → 0</text>
+  <text x="1045" y="251" text-anchor="middle" class="note">LATENCY_CYCLES = 3</text>
 
-  <rect x="824" y="220" width="205" height="88" rx="12" fill="#ffffff" stroke="#23a394" stroke-width="1.8"/>
-  <text x="926.5" y="249" text-anchor="middle" class="nodeTitle">Wait counter</text>
-  <text x="926.5" y="276" text-anchor="middle" class="label">3 → 2 → 1 → 0</text>
-  <path d="M780 249 H824" class="controlEdge"/>
-  <text x="801" y="238" text-anchor="middle" class="small">load</text>
-  <path d="M824 291 H780" class="controlEdge dashed"/>
-  <text x="801" y="312" text-anchor="middle" class="small">done</text>
+  <path d="M810 190 H930" class="control"/>
+  <text x="870" y="180" text-anchor="middle" class="edgeLabel">load / decrement</text>
+  <path d="M930 247 H870 V270 H810" class="control"/>
+  <text x="857" y="258" text-anchor="end" class="edgeLabel">done</text>
 
-  <!-- Datapath -->
-  <rect x="326" y="373" width="738" height="258" rx="14" fill="#f1f0ff" stroke="#8982ec" stroke-width="1.8"/>
-  <text x="349" y="402" class="section">DATAPATH</text>
+  <rect x="360" y="390" width="255" height="210" rx="6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+  <rect x="360" y="390" width="255" height="7" fill="#2563eb"/>
+  <text x="487.5" y="430" text-anchor="middle" class="blockTitle">Request Registers</text>
+  <text x="387" y="472" class="mono">lat_rw_q</text>
+  <text x="387" y="514" class="mono">lat_addr_q[31:0]</text>
+  <text x="387" y="556" class="mono">lat_wdata_q[31:0]</text>
+  <text x="487.5" y="582" text-anchor="middle" class="note">captured in S_LATCH</text>
 
-  <rect x="350" y="428" width="210" height="138" rx="12" fill="#ffffff" stroke="#665ee8" stroke-width="1.8"/>
-  <text x="455" y="456" text-anchor="middle" class="nodeTitle">Request registers</text>
-  <text x="372" y="487" class="label">lat_rw_q</text>
-  <text x="372" y="514" class="label">lat_addr_q[31:0]</text>
-  <text x="372" y="541" class="label">lat_wdata_q[31:0]</text>
+  <rect x="690" y="515" width="180" height="85" rx="6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+  <rect x="690" y="515" width="180" height="7" fill="#2563eb"/>
+  <text x="780" y="550" text-anchor="middle" class="blockTitle">Word Index</text>
+  <text x="780" y="580" text-anchor="middle" class="mono">addr[4:2]</text>
 
-  <rect x="610" y="428" width="170" height="88" rx="12" fill="#ffffff" stroke="#665ee8" stroke-width="1.8"/>
-  <text x="695" y="456" text-anchor="middle" class="nodeTitle">Address decode</text>
-  <text x="695" y="486" text-anchor="middle" class="label">addr[4:2]</text>
+  <rect x="950" y="390" width="230" height="210" rx="6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+  <rect x="950" y="390" width="230" height="7" fill="#2563eb"/>
+  <text x="1065" y="430" text-anchor="middle" class="blockTitle">Register Memory</text>
+  <text x="1065" y="472" text-anchor="middle" class="mono">mem[0:7]</text>
+  <text x="1065" y="510" text-anchor="middle" class="mono">8 × 32 bits</text>
+  <text x="1065" y="550" text-anchor="middle" class="note">read or write at indexed word</text>
+  <text x="1065" y="576" text-anchor="middle" class="note">operation commits in S_RESPOND</text>
 
-  <rect x="824" y="416" width="205" height="150" rx="12" fill="#ffffff" stroke="#665ee8" stroke-width="1.8"/>
-  <text x="926.5" y="447" text-anchor="middle" class="nodeTitle">Register memory</text>
-  <text x="926.5" y="480" text-anchor="middle" class="label">8 words × 32 bits</text>
-  <text x="926.5" y="508" text-anchor="middle" class="small">one indexed access</text>
-  <text x="926.5" y="535" text-anchor="middle" class="small">during RESPOND</text>
+  <rect x="1230" y="445" width="135" height="105" rx="6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+  <rect x="1230" y="445" width="135" height="7" fill="#2563eb"/>
+  <text x="1297.5" y="481" text-anchor="middle" class="blockTitle">Read Data</text>
+  <text x="1297.5" y="516" text-anchor="middle" class="mono">resp_rdata_q</text>
 
-  <rect x="824" y="576" width="205" height="52" rx="12" fill="#ffffff" stroke="#665ee8" stroke-width="1.8"/>
-  <text x="926.5" y="608" text-anchor="middle" class="nodeTitle">Read-data register</text>
+  <path d="M615 550 H690" class="data"/>
+  <text x="652" y="540" text-anchor="middle" class="edgeLabel">lat_addr_q</text>
+  <path d="M870 550 H950" class="data"/>
+  <text x="910" y="540" text-anchor="middle" class="edgeLabel">idx[2:0]</text>
+  <path d="M615 500 H950" class="data"/>
+  <text x="780" y="490" text-anchor="middle" class="edgeLabel">lat_wdata_q[31:0]</text>
+  <path d="M615 450 H950" class="data"/>
+  <text x="780" y="440" text-anchor="middle" class="edgeLabel">lat_rw_q</text>
+  <path d="M1180 499 H1230" class="data"/>
+  <text x="1205" y="489" text-anchor="middle" class="edgeLabel">read data</text>
 
-  <!-- Response interface -->
-  <rect x="1140" y="220" width="225" height="300" rx="16" fill="#eef6ff" stroke="#4b91da" stroke-width="2" filter="url(#shadow)"/>
-  <text x="1252.5" y="254" text-anchor="middle" class="section">RESPONSE INTERFACE</text>
-  <line x1="1163" y1="272" x2="1342" y2="272" stroke="#90bbe8"/>
-  <text x="1168" y="314" class="label">resp_ready</text>
-  <text x="1168" y="350" class="small">one-cycle pulse</text>
-  <text x="1168" y="401" class="label">resp_rdata[31:0]</text>
-  <text x="1168" y="437" class="small">registered read data</text>
-  <line x1="1163" y1="463" x2="1342" y2="463" stroke="#90bbe8"/>
-  <text x="1168" y="493" class="small">One outstanding request</text>
+  <path d="M520 300 V390" class="control"/>
+  <text x="530" y="350" class="edgeLabel">capture</text>
+  <path d="M700 300 V345 H1065 V390" class="control"/>
+  <text x="880" y="335" text-anchor="middle" class="edgeLabel">memory access / R/W</text>
 
-  <!-- External and internal connections -->
-  <path d="M260 272 H322 V232 H350" class="controlEdge"/>
-  <text x="291" y="259" class="small">valid</text>
+  <path d="M810 270 H850 V320 H1425 V240 H1510" class="control"/>
+  <text x="1440" y="228" class="edgeLabel">one-cycle pulse</text>
+  <text x="1525" y="245" class="signal">resp_ready</text>
+  <path d="M1365 499 H1510" class="data"/>
+  <text x="1525" y="504" class="signal">resp_rdata[31:0]</text>
 
-  <path d="M260 337 H286 V497 H350" class="dataEdge"/>
-  <text x="272" y="477" class="small">request fields</text>
+  <text x="44" y="657" class="signal">clk</text>
+  <path d="M86 652 H320" class="global"/>
+  <text x="44" y="700" class="signal">rst_n</text>
+  <path d="M96 695 H320" class="global"/>
+  <text x="340" y="662" class="note">Clock drives FSM, counter, request registers, memory writes, and response register</text>
+  <text x="340" y="701" class="note">Active-low asynchronous reset clears control/datapath registers; memory contents are not reset</text>
 
-  <path d="M565 316 V383 H455 V428" class="controlEdge"/>
-  <text x="475" y="372" class="small">capture</text>
-
-  <path d="M560 475 H610" class="dataEdge"/>
-  <text x="585" y="463" text-anchor="middle" class="small">address</text>
-
-  <path d="M780 475 H824" class="dataEdge"/>
-  <text x="802" y="463" text-anchor="middle" class="small">index</text>
-
-  <path d="M560 535 H800 V520 H824" class="dataEdge"/>
-  <text x="681" y="554" text-anchor="middle" class="small">write data + R/W</text>
-
-  <path d="M717 316 V365 H1044 V492 H1029" class="controlEdge"/>
-  <text x="923" y="355" text-anchor="middle" class="small">access enable</text>
-
-  <path d="M926 566 V576" class="dataEdge"/>
-  <text x="946" y="575" class="small">read</text>
-
-  <path d="M1029 602 H1115 V399 H1140" class="dataEdge"/>
-  <text x="1080" y="619" text-anchor="middle" class="small">rdata</text>
-
-  <path d="M758 274 H1105 V314 H1140" class="controlEdge"/>
-  <text x="1062" y="301" text-anchor="middle" class="small">ready pulse</text>
-
-  <!-- Legend -->
-  <line x1="416" y1="694" x2="466" y2="694" class="controlEdge"/>
-  <text x="478" y="699" class="small">control</text>
-  <line x1="598" y1="694" x2="648" y2="694" class="dataEdge"/>
-  <text x="660" y="699" class="small">data</text>
-  <text x="790" y="699" class="small">Default implementation: ADDR_W=5, DEPTH_WORDS=8, LATENCY_CYCLES=3</text>
+  <line x1="515" y1="770" x2="565" y2="770" stroke="#0f766e" stroke-width="2.2"/>
+  <text x="577" y="775" class="note">control</text>
+  <line x1="685" y1="770" x2="735" y2="770" stroke="#2563eb" stroke-width="3.2"/>
+  <text x="747" y="775" class="note">data bus</text>
+  <text x="875" y="775" class="note">Default physical implementation: ADDR_W=5, DEPTH_WORDS=8, LATENCY_CYCLES=3</text>
 </svg>
