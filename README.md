@@ -25,12 +25,7 @@ The implemented configuration is an **8-word × 32-bit memory** with a blocking 
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    REQ["Request interface"] --> FSM["IDLE · LATCH · WAIT · RESPOND"]
-    FSM --> MEM["8 × 32-bit register memory"]
-    MEM --> RESP["Response interface"]
-```
+![Memory controller RTL architecture](docs/images/controller-architecture.svg)
 
 The controller accepts a request in `S_IDLE`, captures its fields in `S_LATCH`, waits for the configured delay in `S_WAIT`, and produces a one-cycle response indication in `S_RESPOND`. Because request fields are captured one cycle after detection, the source must hold them stable through the latch edge. See [Architecture and protocol](docs/architecture.md) for the exact cycle behavior.
 
