@@ -1,0 +1,34 @@
+# Local simulation products
+build/
+*.vcd
+*.wlf
+
+# Commercial EDA working data
+INCA_libs/
+work/
+*.key
+*.history
+*.cmd
+*.jou
+
+# Foundry and implementation artifacts kept private
+pdk/
+vendor/
+*.gds
+*.gdsii
+*.oas
+*.oa
+*.db
+*.lib
+*.lef
+*.tf
+*.spef
+*.sdf
+*.pex
+*.pxi
+*.tr0
+*.raw
+
+# OS/editor files
+.DS_Store
+*~
