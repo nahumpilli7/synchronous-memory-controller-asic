@@ -1,0 +1,32 @@
+name: Materialize correct DFF images
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the authoritative DFF schematic and layout
+        if: ${{ hashFiles('docs/images/dff-final-layout.png.b64') != '' }}
+        shell: bash
+        run: |
+          base64 --decode docs/images/dff-transistor-schematic.png.b64 > docs/images/dff-transistor-schematic.png
+          base64 --decode docs/images/dff-final-layout.png.b64 > docs/images/dff-final-layout.png
+          base64 --decode docs/physical-design.md.b64 > docs/physical-design.md
+          git rm docs/images/dff-transistor-schematic.png.b64
+          git rm docs/images/dff-final-layout.png.b64
+          git rm docs/physical-design.md.b64
+          git rm docs/images/dff-cell-characterization.jpg
+          git rm .github/workflows/materialize-correct-dff.yml
+          git add docs/images/dff-transistor-schematic.png docs/images/dff-final-layout.png docs/physical-design.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Replace DFF image with correct schematic and layout"
+          git push
