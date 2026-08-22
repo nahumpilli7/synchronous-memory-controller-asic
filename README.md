@@ -63,6 +63,8 @@ The testbench performs two independent word tests and an overwrite/readback test
 
 More detail is available in [Physical implementation](docs/physical-design.md) and [Verification](docs/verification.md).
 
+The custom DFF was also taken through cell-level LVS and parasitic-extracted HSPICE timing characterization; see [DFF cell characterization](docs/physical-design.md#dff-cell-characterization).
+
 ## Result interpretation
 
 - The +13.52 ns setup slack was measured against a 15 ns constraint. Subtracting slack gives an indicative 1.48 ns limiting period (about 675.7 MHz), but this is **not presented as signoff Fmax** because a final parasitic file was not retained with the PrimeTime run.
