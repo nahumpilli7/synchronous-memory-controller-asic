@@ -20,7 +20,9 @@ The physical library was assembled from inverter, NAND2, NAND3, NOR2, XOR2, AOI2
 
 ### DFF cell characterization
 
-The falling-edge DFF used for state and data storage was verified at the cell level before full-chip implementation. Calibre LVS reported `CORRECT`, and the parasitic-extracted HSPICE testbench completed normally at 25 °C.
+The custom storage cell is a falling-edge DFF with an active-high asynchronous reset. Its final standard-cell layout measures 7.8 µm × 6.5 µm. Calibre DRC reported no results and LVS reported `CORRECT` before the cell was integrated into the controller.
+
+The parasitic-extracted HSPICE testbench used a 1.2 V supply, 25 °C temperature, 20 ps input transitions, and a 20 fF load on `Q`. PrimeLib modeled the cell with `clocked_on = (!CLK)` and generated `setup_falling` and `hold_falling` constraint tables.
 
 | Retained measurement | Result |
 |---|---:|
@@ -28,12 +30,17 @@ The falling-edge DFF used for state and data storage was verified at the cell le
 | Clock-to-Q, falling | 163.40 ps |
 | Worst clock-to-Q | 163.40 ps |
 | Average clock-to-Q | 149.30 ps |
+| Active-high reset delay | 141.68 ps |
 | Q rise slew | 56.76 ps |
 | Q fall slew | 59.96 ps |
+| Data-dependent setup, `Tsu_dd` | 20 ps |
+| Optimum setup, `Tsu_opt` | 60 ps |
+| Hold time, `Thold` | −5.73 ps |
+| Minimum total delay, `tD` | 210.6 ps |
 
-The setup-time sweep passed at 20 ps and failed at 10 ps, locating the observed boundary to that sweep resolution. These are single-condition educational characterization results, not multi-corner library signoff data.
+The explicit setup sweep passed at 20 ps and failed at 10 ps and 0 ps. The 60 ps setup point minimized total delay. These are single-condition educational characterization results, not multi-corner library signoff data.
 
-![Custom DFF layout, LVS, and PEX timing characterization](images/dff-cell-characterization.svg)
+![Retained DFF layout, Calibre LVS, PEX HSPICE timing, and setup sweep](images/dff-cell-characterization.jpg)
 
 ## Synthesis
 
