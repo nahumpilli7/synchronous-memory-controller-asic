@@ -18,6 +18,23 @@ The physical library was assembled from inverter, NAND2, NAND3, NOR2, XOR2, AOI2
 
 ![Custom standard-cell library](images/custom-standard-cell-library.png)
 
+### DFF cell characterization
+
+The falling-edge DFF used for state and data storage was verified at the cell level before full-chip implementation. Calibre LVS reported `CORRECT`, and the parasitic-extracted HSPICE testbench completed normally at 25 °C.
+
+| Retained measurement | Result |
+|---|---:|
+| Clock-to-Q, rising | 135.21 ps |
+| Clock-to-Q, falling | 163.40 ps |
+| Worst clock-to-Q | 163.40 ps |
+| Average clock-to-Q | 149.30 ps |
+| Q rise slew | 56.76 ps |
+| Q fall slew | 59.96 ps |
+
+The setup-time sweep passed at 20 ps and failed at 10 ps, locating the observed boundary to that sweep resolution. These are single-condition educational characterization results, not multi-corner library signoff data.
+
+![Custom DFF layout, LVS, and PEX timing characterization](images/dff-cell-characterization.svg)
+
 ## Synthesis
 
 Synopsys Design Compiler mapped the controller and register-based memory to 1,628 cells with a reported total area of 34,036.600420 library units.
