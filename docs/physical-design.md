@@ -22,6 +22,14 @@ The physical library was assembled from inverter, NAND2, NAND3, NOR2, XOR2, AOI2
 
 The custom storage cell is a falling-edge DFF with an active-high asynchronous reset. Its final standard-cell layout measures 7.8 µm × 6.5 µm. Calibre DRC reported no results and LVS reported `CORRECT` before the cell was integrated into the controller.
 
+#### Transistor-level schematic
+
+![Falling-edge DFF transistor-level schematic](images/dff-transistor-schematic.png)
+
+#### Final cell layout
+
+![Final 7.8 µm by 6.5 µm DFF layout](images/dff-final-layout.png)
+
 The parasitic-extracted HSPICE testbench used a 1.2 V supply, 25 °C temperature, 20 ps input transitions, and a 20 fF load on `Q`. PrimeLib modeled the cell with `clocked_on = (!CLK)` and generated `setup_falling` and `hold_falling` constraint tables.
 
 | Retained measurement | Result |
@@ -39,8 +47,6 @@ The parasitic-extracted HSPICE testbench used a 1.2 V supply, 25 °C temperature
 | Minimum total delay, `tD` | 210.6 ps |
 
 The explicit setup sweep passed at 20 ps and failed at 10 ps and 0 ps. The 60 ps setup point minimized total delay. These are single-condition educational characterization results, not multi-corner library signoff data.
-
-![Retained DFF layout, Calibre LVS, PEX HSPICE timing, and setup sweep](images/dff-cell-characterization.jpg)
 
 ## Synthesis
 
